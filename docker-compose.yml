@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  fallback:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped
+    labels:
+      # Traefik labels for integration
+      - "traefik.enable=true"
+      - "traefik.http.routers.fallback.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.fallback.priority=1"
+      - "traefik.http.services.fallback.loadbalancer.server.port=8080"
